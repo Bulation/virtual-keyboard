@@ -2,6 +2,7 @@
 
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -9,23 +10,29 @@ const stylesHandler = 'style-loader';
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
-  entry: './src/index.js',
+  entry: ['./src/js/index.js', '.src/css/style.css'],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.[contenthash].js',
+    filename: 'bundle.js',
     assetModuleFilename: '[hash][ext][query]',
     clean: true,
   },
   devtool: !isProduction ? 'source-map' : false,
   devServer: {
+    historyApiFallback: true,
     open: true,
+    compress: true,
     host: 'localhost',
+    hot: true,
+    static: {
+      directory: path.join(__dirname, './dist'),
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
-
+    new webpack.HotModuleReplacementPlugin(),
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
