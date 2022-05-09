@@ -322,6 +322,6 @@ export default [
   {
     small: 'Win',
     shift: 'Win',
-    code: 'Win',
+    code: 'MetaLeft',
   },
 ];

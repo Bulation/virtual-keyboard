@@ -16,6 +16,16 @@ export default class Keyboard {
     this.initKeyboard(this.rows, this.langs[this.langIndex]);
   }
 
+  setCaps() {
+    this.isCaps = !this.isCaps;
+    this.onUpdateCaps(this.isCaps, this.isShift);
+  }
+
+  setShift() {
+    this.isShift = !this.isShift;
+    this.onUpdateShift(this.isCaps, this.isShift);
+  }
+
   setLang() {
     this.langIndex = (+this.langIndex + 1) % this.langs.length;
     localStorage.setItem('lang', this.langIndex);

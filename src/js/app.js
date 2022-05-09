@@ -24,47 +24,11 @@ export default class Application {
               output.printToOutput(key);
             }
             output.node.focus();
-            if (key.code.match(/Caps/) && !model.isCaps) {
-              model.isCaps = true;
-              this.keys.forEach((el) => {
-                if (model.isShift) {
-                  el.updateUpperCase(false);
-                } else {
-                  el.updateUpperCase(true);
-                }
-              });
-            } else if (key.code.match(/Caps/) && model.isCaps && !e.repeat) {
-              model.isCaps = false;
-              this.keys.forEach((el) => {
-                if (model.isShift) {
-                  el.updateUpperCase(true);
-                } else {
-                  el.updateUpperCase(false);
-                }
-              });
-              key.node.classList.remove('keyboard__key_active');
+            if (key.code.match(/Caps/) && !e.repeat) {
+              model.setCaps();
             }
-            if (key.code.match(/Shift/) && !model.isShift) {
-              model.isShift = true;
-              this.keys.forEach((el) => {
-                if (model.isCaps) {
-                  el.updateUpperCase(false);
-                } else {
-                  el.updateUpperCase(true);
-                }
-                el.updateNonLetters(true);
-              });
-            } else if (key.code.match(/Shift/) && model.isShift && !e.repeat) {
-              model.isShift = false;
-              this.keys.forEach((el) => {
-                if (model.isCaps) {
-                  el.updateUpperCase(true);
-                } else {
-                  el.updateUpperCase(false);
-                }
-                el.updateNonLetters(false);
-              });
-              key.node.classList.remove('keyboard__key_active');
+            if (key.code.match(/Shift/) && !e.repeat) {
+              model.setShift();
             }
             if (key.code.match(/Alt/)) {
               model.isAlt = true;
@@ -74,18 +38,7 @@ export default class Application {
             }
             if (model.isShift && model.isAlt) {
               model.setLang();
-              model.isShift = false;
-              this.keys.forEach((el) => {
-                if (model.isCaps) {
-                  el.updateUpperCase(true);
-                } else {
-                  el.updateUpperCase(false);
-                }
-                el.updateNonLetters(false);
-                if (el.code.match(/Shift/)) {
-                  el.node.classList.remove('keyboard__key_active');
-                }
-              });
+              model.setShift();
             }
             if (model.isCtrl && key.code === 'KeyA') {
               output.node.select();
@@ -106,6 +59,31 @@ export default class Application {
       this.keys.forEach((key) => {
         const keyObj = lang.find((el) => el.code === key.code);
         key.updateLang(keyObj, caps);
+      });
+    };
+    model.onUpdateCaps = (caps, shift) => {
+      this.keys.forEach((el) => {
+        if ((caps && shift) || (!caps && !shift)) {
+          el.updateUpperCase(false);
+        } else {
+          el.updateUpperCase(true);
+        }
+        if (!caps && el.code.match(/Caps/)) {
+          el.node.classList.remove('keyboard__key_active');
+        }
+      });
+    };
+    model.onUpdateShift = (caps, shift) => {
+      this.keys.forEach((el) => {
+        if ((caps && shift) || (!caps && !shift)) {
+          el.updateUpperCase(false);
+        } else {
+          el.updateUpperCase(true);
+        }
+        el.updateNonLetters(shift);
+        if (!shift && el.code.match(/Shift/)) {
+          el.node.classList.remove('keyboard__key_active');
+        }
       });
     };
     model.load();
