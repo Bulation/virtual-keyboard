@@ -1,12 +1,15 @@
 import Component from '../common/component';
 
+const bigKeys = ['Delete', 'CapsLock', 'Backspace', 'Enter', 'Shift', ' ', 'Tab'];
 export default class Key extends Component {
   constructor(parent, tagName, className, data, model) {
     super(parent, tagName, className, data);
     this.data = data;
     this.model = model;
-    if (data === ' ') {
-      this.node.style.width = '400px';
+    if (bigKeys.includes(data)) {
+      this.node.style.flex = '1 0 auto';
+      this.node.style.aspectRatio = 'auto';
+      this.node.style.width = 'auto';
     }
     this.node.onmousedown = (e) => this.handleDown(e);
     this.node.ontouchstart = (e) => {

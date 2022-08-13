@@ -2,14 +2,19 @@ import Textarea from './view/textarea';
 import Keyboard from './keyboard';
 import KeyboardView from './view/keyboardview';
 import rows from './data/rows';
+import Component from './common/component';
 
 export default class Application {
   constructor(node) {
     this.node = node;
-    this.output = new Textarea(this.node, 'textarea', 'textarea', '', 5, 50, false, 'off');
+    this.pageContainer = new Component(this.node, 'div', 'page-container', '');
+    this.outputContainer = new Component(this.pageContainer.node, 'div', 'output-container', '');
+    this.title = new Component(this.outputContainer.node, 'h1', 'output-title', 'Virtual Keyboard');
+    this.output = new Textarea(this.outputContainer.node, 'textarea', 'textarea', '', 5, 50, false, 'off');
     const model = new Keyboard();
     model.load();
-    this.keyboardView = new KeyboardView(this.node, 'div', 'keyboard', '', rows, model);
+    this.keyboardContainer = new Component(this.pageContainer.node, 'div', 'keyboard-container', '');
+    this.keyboardView = new KeyboardView(this.keyboardContainer.node, 'div', 'keyboard', '', rows, model);
     model.update = (data) => {
       this.output.printToOutput(data);
       if (!model.isShift && !data.includes('Shift')) {
