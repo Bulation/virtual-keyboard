@@ -1,58 +1,65 @@
 import Component from './component';
-import letters from './letters';
 
 export default class Key extends Component {
-  constructor(parent, tagName, className, { small, shift, code }) {
-    super(parent, tagName, className, small);
-    this.activeLetter = small;
-    this.code = code;
-    this.small = small;
-    this.shift = shift;
-    this.isFnKey = Boolean(small.match(/Ctrl|Alt|Shift|Tab|Back|Del|Enter|Caps|Win/));
-    this.isLetter = letters.includes(this.small);
-    if (code.includes('Space')) {
+  constructor(parent, tagName, className, data, model) {
+    super(parent, tagName, className, data);
+    this.data = data;
+    this.model = model;
+    if (data === ' ') {
       this.node.style.width = '400px';
-    } else if (this.isFnKey) {
-      this.node.style.width = '100px';
     }
     this.node.onmousedown = (e) => this.handleDown(e);
+    this.node.ontouchstart = (e) => {
+      this.handleDown(e);
+    };
     this.node.onmouseup = (e) => this.handleUp(e);
     this.node.onmouseleave = (e) => this.handleUp(e);
+    this.node.ontouchend = (e) => {
+      this.handleUp(e);
+    };
   }
 
-  updateLang(obj, caps) {
-    this.code = obj.code;
-    this.small = obj.small;
-    this.shift = obj.shift;
-    this.isLetter = letters.includes(this.small);
-    if ((caps && !this.isFnKey && !this.isLetter) || (!caps && !this.isFnKey)) {
-      // если зажат капс,то поднимаем в верхний регистр только цифры,если не зажат,то поднимаем все
-      this.activeLetter = this.shift;
-    } else {
-      this.activeLetter = this.small;
+  handleDown(e) {
+    e.preventDefault();
+    this.node.classList.add('keyboard__key_active');
+    if (this.data.match(/Caps/) && !e.repeat) {
+      this.model.isCaps = !this.model.isCaps;
     }
-    this.node.innerHTML = this.activeLetter;
+    if (this.data.match(/Shift/) && !e.repeat) {
+      this.model.isShift = !this.model.isShift;
+    }
+    if (!this.data.match(/Shift/) && !e.repeat && this.model.isShift) { // если был зажат шифт и нажата другая клавиша, то меняем состояние шифта
+      this.model.isShift = !this.model.isShift;
+    }
+    if (this.data.match(/Alt/)) {
+      this.model.isAlt = true;
+    }
+    if (this.data.match(/Ctrl/)) {
+      this.model.isCtrl = true;
+    }
+    if (this.model.isShift && this.model.isAlt) {
+      this.model.langIndex = (+this.model.langIndex + 1) % this.model.langs.length;
+    }
+    if (!this.model.isShift && this.data.match(/Shift/)) { // ремуваем классы, если нажали на зажатый шифт, капс
+      this.node.classList.remove('keyboard__key_active');
+    }
+    if (!this.model.isCaps && this.data.match(/Caps/)) {
+      this.node.classList.remove('keyboard__key_active');
+    }
+    this.model.update(this.data);
   }
 
-  updateUpperCase(isTrue) {
-    if (isTrue) {
-      if (this.isLetter && !this.isFnKey) {
-        this.activeLetter = this.shift;
-      }
-    } else if (this.isLetter && !this.isFnKey) {
-      this.activeLetter = this.small;
+  handleUp(e) {
+    e.preventDefault();
+    if (!this.data.match(/Caps|Shift/)) {
+      this.node.classList.remove('keyboard__key_active');
     }
-    this.node.innerHTML = this.activeLetter;
+    this.model.isAlt = false;
+    this.model.isCtrl = false;
   }
 
-  updateNonLetters(isTrue) {
-    if (isTrue) {
-      if (!this.isLetter && !this.isFnKey) {
-        this.activeLetter = this.shift;
-      }
-    } else if (!this.isLetter && !this.isFnKey) {
-      this.activeLetter = this.small;
-    }
-    this.node.innerHTML = this.activeLetter;
+  setData(data) {
+    this.data = data;
+    this.node.innerHTML = data;
   }
 }
