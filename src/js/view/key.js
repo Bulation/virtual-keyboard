@@ -23,15 +23,13 @@ export default class Key extends Component {
   }
 
   handleDown(e) {
+    console.log(this.model);
     e.preventDefault();
     this.node.classList.add('keyboard__key_active');
     if (this.data.match(/Caps/) && !e.repeat) {
       this.model.isCaps = !this.model.isCaps;
     }
     if (this.data.match(/Shift/) && !e.repeat) {
-      this.model.isShift = !this.model.isShift;
-    }
-    if (!this.data.match(/Shift/) && !e.repeat && this.model.isShift) { // если был зажат шифт и нажата другая клавиша, то меняем состояние шифта
       this.model.isShift = !this.model.isShift;
     }
     if (this.data.match(/Alt/)) {
