@@ -1,7 +1,7 @@
-import Textarea from './textarea';
+import Textarea from './view/textarea';
 import Keyboard from './keyboard';
-import KeyboardView from './keyboardview';
-import rows from './rows';
+import KeyboardView from './view/keyboardview';
+import rows from './data/rows';
 
 export default class Application {
   constructor(node) {

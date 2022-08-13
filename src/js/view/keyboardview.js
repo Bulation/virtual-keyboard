@@ -1,4 +1,4 @@
-import Component from './component';
+import Component from '../common/component';
 import Key from './key';
 
 export default class KeyboardView extends Component {

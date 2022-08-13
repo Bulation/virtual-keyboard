@@ -1,4 +1,4 @@
-import Component from './component';
+import Component from '../common/component';
 
 const functionalKeys = ['CapsLock', 'Shift', 'Ctrl', 'Alt'];
 

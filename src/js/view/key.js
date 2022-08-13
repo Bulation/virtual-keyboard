@@ -1,4 +1,4 @@
-import Component from './component';
+import Component from '../common/component';
 
 export default class Key extends Component {
   constructor(parent, tagName, className, data, model) {

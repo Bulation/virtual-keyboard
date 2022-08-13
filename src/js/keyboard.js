@@ -1,4 +1,4 @@
-import langs from './langs';
+import langs from './data/langs';
 
 export default class Keyboard {
   constructor() {
