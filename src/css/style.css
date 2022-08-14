@@ -1,0 +1,78 @@
+@import url(normalize.css);
+
+h1 {
+  margin: 10px auto;
+  font-size: 20px;
+}
+
+body {
+  color: #ffffff;
+  font-family: "Roboto";
+  box-sizing: border-box;
+  padding-left: 10em;
+  padding-right: 10em;
+  font-size: 1.76vw;
+}
+
+.page-container {
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+  text-align: center;
+  color: #ffffff;
+  aspect-ratio: 16/18;
+  padding-top: 10px;
+}
+
+.output-container {
+  aspect-ratio: 16/9;
+  border-radius: 12px 12px 0 0;
+  background-color: #222222;
+  box-sizing: border-box;
+  padding: 0 15px;
+  box-shadow: 10px 10px 10px rgb(17 17 17 / 74%);
+}
+.keyboard-container {
+  aspect-ratio: 16/9;
+  border-radius: 0 0 12px 12px;
+  padding: 15px 15px 5px;
+  background-color: #333333;
+  transform: perspective(50em) rotateX(50deg);
+  transform-origin: 50% 0;
+  box-shadow: 10px 10px 10px rgb(17 17 17 / 74%);
+}
+
+.keyboard__row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.keyboard__key {
+  width: 6%;
+  aspect-ratio: 1/1;
+  padding: 0;
+  border: 2px solid #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333333;
+  border-radius: 3px 3px 50% 50%/3px 3px 3px 3px;
+  box-shadow: 0 2px 2px #000000;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.keyboard__key_active {
+  background-color: green;
+  border-radius: 10px;
+}
+
+.textarea {
+      width: 100%;
+        height: calc(100% - 60px);
+        resize: none;
+}
+
+.textarea::placeholder {
+  color: red;
+}
